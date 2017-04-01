@@ -29,9 +29,9 @@ public class JpaConfig {
     DataSource dataSource() {
         HikariConfig config = new HikariConfig();
         config.setDriverClassName("com.mysql.jdbc.Driver");
-        config.setJdbcUrl("jdbc:mysql://localhost:3306/inventorydata?useSSL=false");
-        config.setUsername("root");
-        config.setPassword("secret");
+        config.setJdbcUrl("mysql://b919df11e63cda:9515b44c@us-cdbr-iron-east-03.cleardb.net/heroku_2da08165b2b76e1?reconnect=true");
+        config.setUsername("b919df11e63cda");
+        config.setPassword("9515b44c");
         return new HikariDataSource(config);
     }
 

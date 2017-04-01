@@ -8,7 +8,6 @@ import se.simjarr.repository.UserRepository;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.util.Collection;
 import java.util.List;
 
 @Component
