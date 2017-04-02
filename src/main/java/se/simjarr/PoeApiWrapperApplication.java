@@ -14,13 +14,6 @@ import se.simjarr.model.ApiDataFetch;
 @SpringBootApplication
 public class PoeApiWrapperApplication {
 
-	@RequestMapping("/")
-	@ResponseBody
-	String home() {
-		return "Hello World!";
-	}
-
-
 	public static void main(String[] args) {
 		SpringApplication.run(PoeApiWrapperApplication.class, args);
 	}

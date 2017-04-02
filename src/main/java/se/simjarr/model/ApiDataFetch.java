@@ -30,7 +30,7 @@ public class ApiDataFetch {
         nextChangeId = nextChangeIdRepository.findAll().iterator().next();
     }
 
-    @Scheduled(fixedDelay = 3000)
+    @Scheduled(fixedDelay = 10000)
     public void run() {
         Connection.Response response = null;
         try {
