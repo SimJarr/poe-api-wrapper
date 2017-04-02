@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import se.simjarr.model.CurrencyStash;
 import se.simjarr.repository.CurrencyStashRepository;
-import se.simjarr.repository.UserRepository;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -23,23 +22,28 @@ public class StashResource {
     private UriInfo uriInfo;
 
     private final CurrencyStashRepository stashRepository;
-    private final UserRepository userRepository;
 
     @Autowired
-    public StashResource(CurrencyStashRepository stashRepository, UserRepository userRepository) {
+    public StashResource(CurrencyStashRepository stashRepository) {
         this.stashRepository = stashRepository;
-        this.userRepository = userRepository;
     }
 
     @GET
     public Response getAll() {
-        List<CurrencyStash> hehe = (List<CurrencyStash>) stashRepository.findAll();
-        return Response.ok(hehe.size()).build();
+        List<CurrencyStash> stashes = (List<CurrencyStash>) stashRepository.findAll();
+        return Response.ok(stashes).build();
+    }
+
+    @GET
+    @Path("/size")
+    public Response getSize() {
+        List<CurrencyStash> stashes = (List<CurrencyStash>) stashRepository.findAll();
+        return Response.ok(stashes.size()).build();
     }
 
     @GET
     @Path("/user/{username}")
-    public Response getStashTab(@PathParam("username") String username) {
+    public Response getUserTabs(@PathParam("username") String username) {
         List<CurrencyStash> stashes = stashRepository.findByUserUsername(username);
         return Response.ok(stashes).build();
     }
