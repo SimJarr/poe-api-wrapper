@@ -1,19 +1,18 @@
 package se.simjarr.model;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
 public class NextChangeId {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
 
     private String nextId;
 
     public NextChangeId(String nextId) {
+        this.id = "next_id";
         this.nextId = nextId;
     }
 

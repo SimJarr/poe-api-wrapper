@@ -27,7 +27,8 @@ public class ApiDataFetch {
         this.userRepository = userRepository;
         this.nextChangeIdRepository = nextChangeIdRepository;
 
-        nextChangeId = nextChangeIdRepository.findAll().iterator().next();
+        nextChangeId = new NextChangeId("57570536-60886358-57044206-66343893-61605538");
+        //nextChangeId = nextChangeIdRepository.findOne("next_id");
     }
 
     @Scheduled(fixedDelay = 10000)
