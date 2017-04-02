@@ -27,7 +27,7 @@ import javax.sql.DataSource;
 @EnableScheduling
 @EnableAsync
 public class JpaConfig {
-    
+
     @Bean
     @Primary
     @ConfigurationProperties(prefix = "spring.datasource")
