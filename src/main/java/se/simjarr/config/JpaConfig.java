@@ -1,5 +1,7 @@
 package se.simjarr.config;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +17,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
 import java.net.URISyntaxException;
 
 @Configuration
@@ -25,18 +28,32 @@ import java.net.URISyntaxException;
 @EnableAsync
 public class JpaConfig {
 
+//    @Bean
+//    public BasicDataSource dataSource() throws URISyntaxException {
+//        String dbUrl = System.getenv("JDBC_DATABASE_URL");
+//        String username = System.getenv("JDBC_DATABASE_USERNAME");
+//        String password = System.getenv("JDBC_DATABASE_PASSWORD");
+//
+//        BasicDataSource basicDataSource = new BasicDataSource();
+//        basicDataSource.setUrl(dbUrl);
+//        basicDataSource.setUsername(username);
+//        basicDataSource.setPassword(password);
+//
+//        return basicDataSource;
+//    }
+
     @Bean
-    public BasicDataSource dataSource() throws URISyntaxException {
+    DataSource dataSource() {
+        HikariConfig cfg = new HikariConfig();
         String dbUrl = System.getenv("JDBC_DATABASE_URL");
         String username = System.getenv("JDBC_DATABASE_USERNAME");
         String password = System.getenv("JDBC_DATABASE_PASSWORD");
 
-        BasicDataSource basicDataSource = new BasicDataSource();
-        basicDataSource.setUrl(dbUrl);
-        basicDataSource.setUsername(username);
-        basicDataSource.setPassword(password);
-
-        return basicDataSource;
+        cfg.setJdbcUrl(dbUrl);
+        cfg.setUsername(username);
+        cfg.setPassword(password);
+        
+        return new HikariDataSource(cfg);
     }
 
     @Bean
