@@ -15,6 +15,7 @@ import se.simjarr.model.ApiDataFetch;
 public class PoeApiWrapperApplication {
 
 	public static void main(String[] args) {
+		System.setProperty("spring.profiles.active", "dev");
 		SpringApplication.run(PoeApiWrapperApplication.class, args);
 	}
 

@@ -1,7 +1,8 @@
 package se.simjarr.model;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class ApiDataFetch {
         nextChangeId = nextChangeIdRepository.findOne("next_id");
     }
 
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 10000)
     public void run() {
         Connection.Response response = null;
         try {
@@ -40,21 +41,23 @@ public class ApiDataFetch {
         }
 
         String json = response.body();
-        JSONObject jsonObject = new JSONObject(json);
 
-        nextChangeId.setNextId(jsonObject.getString("next_change_id"));
+        JsonParser jsonParser = new JsonParser();
+        JsonObject gsonObject = jsonParser.parse(json).getAsJsonObject();
+
+        nextChangeId.setNextId(gsonObject.get("next_change_id").getAsString());
         nextChangeIdRepository.save(nextChangeId);
         System.out.println("new id: " + nextChangeId.getNextId());
-        JSONArray stashes = jsonObject.getJSONArray("stashes");
-        for (int i = 0; i < stashes.length(); i++) {
-            JSONObject object = stashes.getJSONObject(i);
-            if (validateJsonStash(object)) {
-                if (object.getString("stashType").equals("CurrencyStash")) {
-                    CurrencyStash dbStash = currencyStashRepository.findByApiId(object.getString("id"));
-                    User dbUser = userRepository.findByUsername(object.getString("accountName"));
+        JsonArray stashes = gsonObject.getAsJsonArray("stashes");
+        for (int i = 0; i < stashes.size(); i++) {
+            JsonObject object = stashes.get(i).getAsJsonObject();
+            if (validateGsonStash(object)) {
+                if (object.get("stashType").getAsString().equals("CurrencyStash")) {
+                    CurrencyStash dbStash = currencyStashRepository.findByApiId(object.get("id").getAsString());
+                    User dbUser = userRepository.findByUsername(object.get("accountName").getAsString());
                     if (dbStash == null) {
                         if(dbUser == null) {
-                            dbUser = new User(object.getString("accountName"));
+                            dbUser = new User(object.get("accountName").getAsString());
                             userRepository.save(dbUser);
                         }
                         dbStash = new CurrencyStash(object, dbUser);
@@ -68,8 +71,8 @@ public class ApiDataFetch {
         }
     }
 
-    private boolean validateJsonStash(JSONObject jsonObject) {
-        if(jsonObject.getJSONArray("items").isNull(0)) return false;
-        return !(jsonObject.getJSONArray("items").getJSONObject(0).getString("league").isEmpty() || !jsonObject.getBoolean("public"));
+    private boolean validateGsonStash(JsonObject jsonObject) {
+        if(jsonObject.getAsJsonArray("items").size() <= 0) return false;
+        return !(jsonObject.getAsJsonArray("items").get(0).getAsJsonObject().get("league").getAsString().isEmpty() || !jsonObject.get("public").getAsBoolean());
     }
 }

@@ -1,5 +1,7 @@
 package se.simjarr.model;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import se.simjarr.repository.UserRepository;
@@ -36,17 +38,17 @@ public class CurrencyStash extends AbstractEntity {
     private String stashName;
     private String league;
 
-    public CurrencyStash(JSONObject jsonObject) {
+    public CurrencyStash(JsonObject jsonObject) {
         stashType = "CurrencyStash";
-        apiId = jsonObject.getString("id");
-        stashName = jsonObject.getString("stash");
+        apiId = jsonObject.get("id").getAsString();
+        stashName = jsonObject.get("stash").getAsString();
 
-        league = jsonObject.getJSONArray("items").getJSONObject(0).getString("league");
-        JSONArray items = jsonObject.getJSONArray("items");
+        league = jsonObject.getAsJsonArray("items").get(0).getAsJsonObject().get("league").getAsString();
+        JsonArray items = jsonObject.getAsJsonArray("items");
         setCurrency(items);
     }
 
-    public CurrencyStash(JSONObject jsonObject, User user) {
+    public CurrencyStash(JsonObject jsonObject, User user) {
         this(jsonObject);
         setUser(user);
     }
@@ -58,27 +60,27 @@ public class CurrencyStash extends AbstractEntity {
         this.user = user;
     }
 
-    private void setCurrency(JSONArray items) {
-        for (int i = 0; i < items.length(); i++) {
-            JSONObject object = items.getJSONObject(i);
-            String currency = object.getString("typeLine");
+    private void setCurrency(JsonArray items) {
+        for (int i = 0; i < items.size(); i++) {
+            JsonObject object = items.get(i).getAsJsonObject();
+            String currency = object.get("typeLine").getAsString();
 
-            if (currency.equals("Orb of Alteration")) alteration = object.getInt("stackSize");
-            if (currency.equals("Orb of Fusing")) fusing = object.getInt("stackSize");
-            if (currency.equals("Orb of Alchemy")) alchemy = object.getInt("stackSize");
-            if (currency.equals("Chaos Orb")) chaos = object.getInt("stackSize");
-            if (currency.equals("Gemcutter's Prism")) gemcutter = object.getInt("stackSize");
-            if (currency.equals("Exalted Orb")) exalt = object.getInt("stackSize");
-            if (currency.equals("Chromatic Orb")) chromatic = object.getInt("stackSize");
-            if (currency.equals("Jeweller's Orb")) jeweller = object.getInt("stackSize");
-            if (currency.equals("Orb of Chance")) chance = object.getInt("stackSize");
-            if (currency.equals("Cartographer's Chisel")) chisel = object.getInt("stackSize");
-            if (currency.equals("Orb of Scouring")) scouring = object.getInt("stackSize");
-            if (currency.equals("Blessed Orb")) blessed = object.getInt("stackSize");
-            if (currency.equals("Orb of Regret")) regret = object.getInt("stackSize");
-            if (currency.equals("Regal Orb")) regal = object.getInt("stackSize");
-            if (currency.equals("Divine Orb")) divine = object.getInt("stackSize");
-            if (currency.equals("Vaal Orb")) vaal = object.getInt("stackSize");
+            if (currency.equals("Orb of Alteration")) alteration = object.get("stackSize").getAsInt();
+            if (currency.equals("Orb of Fusing")) fusing = object.get("stackSize").getAsInt();
+            if (currency.equals("Orb of Alchemy")) alchemy = object.get("stackSize").getAsInt();
+            if (currency.equals("Chaos Orb")) chaos = object.get("stackSize").getAsInt();
+            if (currency.equals("Gemcutter's Prism")) gemcutter = object.get("stackSize").getAsInt();
+            if (currency.equals("Exalted Orb")) exalt = object.get("stackSize").getAsInt();
+            if (currency.equals("Chromatic Orb")) chromatic = object.get("stackSize").getAsInt();
+            if (currency.equals("Jeweller's Orb")) jeweller = object.get("stackSize").getAsInt();
+            if (currency.equals("Orb of Chance")) chance = object.get("stackSize").getAsInt();
+            if (currency.equals("Cartographer's Chisel")) chisel = object.get("stackSize").getAsInt();
+            if (currency.equals("Orb of Scouring")) scouring = object.get("stackSize").getAsInt();
+            if (currency.equals("Blessed Orb")) blessed = object.get("stackSize").getAsInt();
+            if (currency.equals("Orb of Regret")) regret = object.get("stackSize").getAsInt();
+            if (currency.equals("Regal Orb")) regal = object.get("stackSize").getAsInt();
+            if (currency.equals("Divine Orb")) divine = object.get("stackSize").getAsInt();
+            if (currency.equals("Vaal Orb")) vaal = object.get("stackSize").getAsInt();
         }
     }
 
